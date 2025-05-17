@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
 
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -7,15 +8,18 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
+const PORT = process.env.PORT || 3000;
+
 const Person = require("./Models/Person");
 
 app.use(cors());
 app.use(express.json());
 
-const url = "mongodb://127.0.0.1:27017/hotel";
+// const mongo_url = process.env.mongoDB_URL_local;
+const mongo_URL = process.env.mongoDB_URL;
 
-mongoose
-  .connect(url)
+const mongoURL = mongoose
+  .connect(mongo_URL)
   .then(() => console.log("Connected to MongoDB!"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
@@ -27,6 +31,6 @@ const personRoutes = require("./Routes/personRoutes");
 app.use("/person", personRoutes);
 
 // Start the Express server
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Express server is running on http://localhost:3000");
 });
